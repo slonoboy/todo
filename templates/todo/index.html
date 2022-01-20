@@ -1,0 +1,74 @@
+<html>
+    {% load static %}
+  <head>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+
+  </head>
+<body id="LoginForm">
+<div class="wrapper">
+    <div class="header">
+        <h1>Todo List for {{user.username}} , <a class="text-white" href = "{%url 'logout'%}">logout</a> </h1>
+    </div>
+    <div class="add-task">
+        <form action = '{% url 'index'%}' method = 'post'> {% csrf_token %}
+        <input id="new-task-input" type="text" name = 'title' placeholder="Add A Task..." />
+        <input type = 'submit' class="add-task-btn" value = '+'>
+        </form>
+    </div>
+    <div class="task-list-header">
+        <h2>Tasks</h2>
+    </div>
+    <div class="task-list-wrapper">
+         {% if tasks %}
+        <ul class="task-list">
+           
+                {% for task in tasks %}
+                     {% if not task.isDone %}
+                    <li class="task">
+                         <label>
+                        {{task.title}} <br> (created in {{task.pub_date}})
+                        </label>
+                        <div class= "buttons" align = "right">
+                        <a href = "{%url 'complete' task.id%}" type="button" class="c btn btn-success">Complete</a>
+                        <a href = "{%url 'delete' task.id%}" type="button" class="d btn btn-danger">Delete</a>
+                        </div>
+                     </li>
+                     <br>
+                     {%endif%}
+                {% endfor %}
+           
+        </ul>
+         {% endif %}
+    </div>
+    <div class="task-list-header">
+        <h2>Completed tasks</h2>
+    </div>
+    <div class="task-list-wrapper">
+        {% if tasks %}
+        <ul class="task-list">
+            
+                {% for task in tasks %}
+                    {% if task.isDone %}
+                    <li class="task">
+                         <label>
+                        {{task.title}}<br> (created in {{task.pub_date}}), (completed in {{task.done_date}}) 
+                        </label>
+                        <div class= "buttons" align = "right">
+                            <a href = "{%url 'delete' task.id%}" type="button" class="d btn btn-danger">Delete</a>
+                        </div>
+                     </li>
+                     <br>
+                     {%endif%}
+                {% endfor %}
+            
+        </ul>
+        {% endif %}
+    </div>
+</div>
+<script src = "{% static 'css/index.css' %}"> </script>
+</body>
+</html>
